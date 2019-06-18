@@ -1,10 +1,7 @@
 package sample;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class Database_Utils {
 
@@ -119,7 +116,7 @@ public class Database_Utils {
         }
     }
 
-    public boolean ValidUserLogin(String username, String password) {
+    public boolean validUserLogin(String username, String password) {
         boolean isValid = false;
         String query = String.format("SELECT COUNT(*) AS USERS FROM user_team WHERE USERNAME = '%1$2s' AND USER_PASSWORD = '%2$2s'", username, password);
         try {
@@ -164,8 +161,22 @@ public class Database_Utils {
         }
     }
 
+    public ResultSet getPlayers(){
+        String query = "SELECT * FROM player_season";
+        ResultSet rs = null;
+        try{
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            rs = statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could Not Retrieve Players");
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
     public static void main(String args[]){
         Database_Utils db = new Database_Utils();
-        System.out.println(db.ValidUserLogin("nick", "burn"));
+        System.out.println(db.validUserLogin("nick", "burn"));
     }
 }

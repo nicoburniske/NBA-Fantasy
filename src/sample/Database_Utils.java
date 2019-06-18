@@ -161,7 +161,7 @@ public class Database_Utils {
         }
     }
 
-    public ResultSet getPlayers(){
+    public ResultSet getAllPlayers(){
         String query = "SELECT * FROM player_season";
         ResultSet rs = null;
         try{
@@ -175,8 +175,48 @@ public class Database_Utils {
         return rs;
     }
 
+    public ResultSet getTeamPlayers(String user){
+        String query = String.format("CALL getTeam('%1$2s')", user);
+        ResultSet rs = null;
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            rs = statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could not obtain user players");
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    public void addPlayer(String user, String player){
+        String query = String.format("CALL enroll('%1$2s','%2$2s')", user, player);
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could not add player");
+            e.printStackTrace();
+        }
+    }
+
+    public void removePlayer(String user, String player) {
+        String query = String.format("CALL removePlayer('%1$2s','%2$2s')", user, player);
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could not remove player");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String args[]){
         Database_Utils db = new Database_Utils();
         System.out.println(db.validUserLogin("nick", "burn"));
     }
+
+
 }

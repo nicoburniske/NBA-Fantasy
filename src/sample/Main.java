@@ -1,12 +1,13 @@
 package sample;
 
-import com.mysql.cj.conf.IntegerProperty;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -29,10 +30,94 @@ public class Main extends Application {
         initLoginButtons();
         initTeamView();
         this.window.setScene(this.login);
+        this.window.centerOnScreen();
         this.window.show();
     }
 
+    private void initLoginButtons() {
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(10);
+        grid.setVgap(8);
+
+        Label username = new Label("Username: ");
+        GridPane.setConstraints(username, 0, 0);
+
+        TextField enterUsername = new TextField();
+        enterUsername.setPromptText("Username");
+        GridPane.setConstraints(enterUsername, 1, 0);
+
+        Label password = new Label("Password: ");
+        GridPane.setConstraints(password, 0, 1);
+
+        TextField enterPassword = new TextField();
+        enterPassword.setPromptText("Password");
+        GridPane.setConstraints(enterPassword, 1, 1);
+
+        Alert userAlreadyExists = new Alert(Alert.AlertType.ERROR);
+        userAlreadyExists.setTitle("Error");
+        userAlreadyExists.setHeaderText("Invalid Input");
+        userAlreadyExists.setContentText("User already exists");
+
+        Alert invalidUserPass = new Alert(Alert.AlertType.ERROR);
+        invalidUserPass.setTitle("Error");
+        invalidUserPass.setHeaderText("Invalid Input");
+        invalidUserPass.setContentText("Invalid Username/Password");
+
+        Button login = new Button("Login");
+        login.setOnAction(e -> {
+            setUsername(enterUsername.getText(), enterPassword.getText());
+            if (database.validUserLogin(this.user, this.pass)) {
+                this.window.setScene(this.team);
+            } else {
+                invalidUserPass.showAndWait();
+            }
+        });
+        GridPane.setConstraints(login, 0, 2);
+
+        Button create_account = new Button("Create Account");
+        create_account.setOnAction(e -> {
+            setUsername(enterUsername.getText(), enterPassword.getText());
+            if (database.userExists(this.user)) {
+                userAlreadyExists.showAndWait();
+            } else {
+                this.database.createUser(this.user, this.pass);
+            }
+        });
+        GridPane.setConstraints(create_account, 1, 2);
+
+        grid.getChildren().addAll(username, enterUsername, password, enterPassword, login, create_account);
+
+        this.login = new Scene(grid, 300, 200);
+    }
+
     private void initTeamView() {
+        createColumns();
+        allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
+
+        Button viewTeam = new Button("View Team Players");
+        viewTeam.setOnAction(e ->
+                allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user))));
+
+        Button viewAllPlayers = new Button("View All Players");
+        viewAllPlayers.setOnAction(e ->
+                allPlayers.setItems(getPlayerList(this.database.getAllPlayers())));
+
+        Button addPlayer = new Button("Add selected player");
+        addPlayer.setOnAction(e ->
+                this.database.addPlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName()));
+
+        Button removePlayer = new Button("Remove selected player");
+        removePlayer.setOnAction(e ->
+                this.database.removePlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName()));
+
+
+        VBox layout = new VBox();
+        layout.getChildren().addAll(allPlayers, viewTeam, viewAllPlayers, addPlayer, removePlayer);
+        team = new Scene(layout);
+    }
+
+    private void createColumns() {
         TableColumn<Player, String> nameCol = new TableColumn<>("Name");
         nameCol.setMinWidth(130);
         nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -45,7 +130,7 @@ public class Main extends Application {
         ageCol.setMinWidth(50);
         ageCol.setCellValueFactory(new PropertyValueFactory<>("Age"));
 
-        TableColumn<Player, Integer> gameCol = new TableColumn<>("Games Played");
+        TableColumn<Player, Integer> gameCol = new TableColumn<>("GP");
         gameCol.setMinWidth(50);
         gameCol.setCellValueFactory(new PropertyValueFactory<>("Games_Played"));
 
@@ -125,56 +210,9 @@ public class Main extends Application {
         drtgCol.setMinWidth(50);
         drtgCol.setCellValueFactory(new PropertyValueFactory<>("DRTG"));
 
-
         allPlayers = new TableView<>();
-        allPlayers.setItems(getPlayerList());
         allPlayers.getColumns().addAll(nameCol, teamCol, ageCol, gameCol, minutesCol, usageCol, turnRatioCol, ftaCol, ftaPerCol, twoACol, twoPerCol, threeACol, threePerCol, efgCol, tsCol, ppgCol, rpgCol, apgCol, spgCol, bpgCol, topgCol, ortgCol, drtgCol);
-
-        VBox layout = new VBox();
-        layout.getChildren().addAll(allPlayers);
-        team = new Scene(layout);
-    }
-
-    private void initLoginButtons() {
-        TextField enterUsername = new TextField();
-        TextField enterPassword = new TextField();
-        enterUsername.setPromptText("Username");
-        enterPassword.setPromptText("Password");
-
-        Alert userAlreadyExists = new Alert(Alert.AlertType.ERROR);
-        userAlreadyExists.setTitle("Error");
-        userAlreadyExists.setHeaderText("Invalid Input");
-        userAlreadyExists.setContentText("User already exists");
-
-        Alert invalidUserPass = new Alert(Alert.AlertType.ERROR);
-        invalidUserPass.setTitle("Error");
-        invalidUserPass.setHeaderText("Invalid Input");
-        invalidUserPass.setContentText("Invalid Username/Password");
-
-        Button login = new Button("Login");
-        login.setOnAction(e -> {
-            setUsername(enterUsername.getText(), enterPassword.getText());
-            if (database.validUserLogin(this.user, this.pass)) {
-                this.window.setScene(this.team);
-            } else {
-                invalidUserPass.showAndWait();
-            }
-        });
-
-        Button create_account = new Button("Create Account");
-        create_account.setOnAction(e -> {
-            setUsername(enterUsername.getText(), enterPassword.getText());
-            if (database.userExists(this.user)) {
-                userAlreadyExists.showAndWait();
-            } else {
-                this.database.createUser(this.user, this.pass);
-            }
-        });
-
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(enterUsername, enterPassword, login, create_account);
-
-        this.login = new Scene(layout, 300, 300);
+        allPlayers.setMaxWidth(1280);
     }
 
     private void setUsername(String user, String pass) {
@@ -182,9 +220,8 @@ public class Main extends Application {
         this.pass = pass;
     }
 
-    private ObservableList<Player> getPlayerList() {
+    private ObservableList<Player> getPlayerList(ResultSet set) {
         ObservableList<Player> playerList = FXCollections.observableArrayList();
-        ResultSet set = database.getPlayers();
         Player p;
         try {
             while (set.next()) {

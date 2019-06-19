@@ -1,5 +1,4 @@
 # NBA-Fantasy
-SCREENSHOTS:
 Login Screen:
 
 ![alt text](https://github.com/nicoburniske/NBA-Fantasy/blob/master/examples/Login%20Screen.PNG)

@@ -179,6 +179,7 @@ public class FantasyApplication extends Application {
 
         Button viewLeague = new Button("Show League");
         viewLeague.setOnAction(e -> {
+            allTeams.setItems(getTeamList(this.database.getTeams()));
             this.window.setScene(this.league);
             this.window.centerOnScreen();
         });

@@ -1,6 +1,6 @@
 # NBA-Fantasy
 
-UML Diagram:
+EER Diagram:
 
 ![alt text](https://github.com/nicoburniske/NBA-Fantasy/blob/master/examples/UML-Diagram.PNG)
 

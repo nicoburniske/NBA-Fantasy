@@ -1,4 +1,4 @@
-package sample;
+package league;
 
 import java.sql.*;
 import java.util.Properties;
@@ -198,6 +198,20 @@ public class Database_Utils {
             rs = statement.executeQuery(query);
         } catch (SQLException e){
             System.out.println("Error: Could not obtain players from search");
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    public ResultSet getTeams(){
+        String query = "CALL getTeams()";
+        ResultSet rs = null;
+        try{
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            rs = statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could Not Retrieve Teams");
             e.printStackTrace();
         }
         return rs;

@@ -1,4 +1,4 @@
-package sample;
+package league;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -7,30 +7,41 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Main extends Application {
+public class FantasyApplication extends Application {
     private Stage window;
-    private Scene login, team;
+    private Scene login, team, league;
     private String user, pass;
     private Database_Utils database;
     private TableView<Player> allPlayers;
+    private TableView<Team> allTeams;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.window = primaryStage;
         database = new Database_Utils();
         this.window.setTitle("NBA Fantasy League");
+        this.window.getIcons().add(new Image("/images/fantasylogo.png"));
 
         initLoginButtons();
+
+        createColumns();
+        createTeamColumns();
+
         initTeamView();
+        initLeagueView();
+
         this.login.getStylesheets().add("nbaStyle.css");
         this.team.getStylesheets().add("nbaStyle.css");
+        this.league.getStylesheets().add("nbaStyle.css");
+
+
         this.window.setScene(this.login);
         this.window.centerOnScreen();
         this.window.show();
@@ -102,9 +113,8 @@ public class Main extends Application {
         grid.setHgap(10);
         grid.setVgap(8);
 
-        createColumns();
         allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
-        GridPane.setConstraints(allPlayers, 0, 1, 4, 5);
+        GridPane.setConstraints(allPlayers, 0, 1, 4, 7);
 
         Label search = new Label("Search: ");
         GridPane.setConstraints(search, 1, 0);
@@ -116,8 +126,8 @@ public class Main extends Application {
         Button searchButton = new Button("League Search");
         searchButton.setOnAction(e ->
                 allPlayers.setItems((getPlayerList(this.database.searchPlayers(searchBox.getText()))))
-                );
-        GridPane.setConstraints(searchButton,3, 0);
+        );
+        GridPane.setConstraints(searchButton, 3, 0);
 
         Button logOut = new Button("Logout");
         logOut.setOnAction(e -> {
@@ -148,8 +158,38 @@ public class Main extends Application {
         });
         GridPane.setConstraints(removePlayer, 5, 4);
 
-        grid.getChildren().addAll(allPlayers,search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut);
+        Button viewLeague = new Button("Show League");
+        viewLeague.setOnAction(e -> {
+            this.window.setScene(this.league);
+            this.window.centerOnScreen();
+        });
+        GridPane.setConstraints(viewLeague, 5, 5);
+
+        grid.getChildren().addAll(allPlayers, search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut, viewLeague);
         team = new Scene(grid);
+    }
+
+    private void initLeagueView() {
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(10);
+        grid.setVgap(8);
+
+        createTeamColumns();
+
+        allTeams.setItems(getTeamList(this.database.getTeams()));
+        GridPane.setConstraints(allTeams, 0, 1, 4, 5);
+
+
+        Button back = new Button("Back to team");
+        back.setOnAction(e -> {
+            window.setScene(this.team);
+            window.centerOnScreen();
+        });
+        GridPane.setConstraints(back, 1, 0);
+
+        grid.getChildren().addAll(allTeams, back);
+        league = new Scene(grid);
     }
 
     private void createColumns() {
@@ -247,7 +287,78 @@ public class Main extends Application {
 
         allPlayers = new TableView<>();
         allPlayers.getColumns().addAll(nameCol, teamCol, ageCol, gameCol, minutesCol, usageCol, turnRatioCol, ftaCol, ftaPerCol, twoACol, twoPerCol, threeACol, threePerCol, efgCol, tsCol, ppgCol, rpgCol, apgCol, spgCol, bpgCol, topgCol, ortgCol, drtgCol);
-        allPlayers.setMaxWidth(1280);
+        allPlayers.setMaxWidth(1270);
+    }
+
+    private void createTeamColumns() {
+        TableColumn<Team, String> nameCol = new TableColumn<>("Name");
+        nameCol.setMinWidth(130);
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+        TableColumn<Team, Double> teamAgeCol = new TableColumn<>("Age");
+        teamAgeCol.setMinWidth(50);
+        teamAgeCol.setCellValueFactory(new PropertyValueFactory<>("Age"));
+
+        TableColumn<Team, Integer> ftaCol = new TableColumn<>("FTA");
+        ftaCol.setMinWidth(50);
+        ftaCol.setCellValueFactory(new PropertyValueFactory<>("FTA"));
+
+        TableColumn<Team, Double> ftaPerCol = new TableColumn<>("FT%");
+        ftaPerCol.setMinWidth(50);
+        ftaPerCol.setCellValueFactory(new PropertyValueFactory<>("FT_Percentage"));
+
+        TableColumn<Team, Integer> twoACol = new TableColumn<>("2PA");
+        twoACol.setMinWidth(50);
+        twoACol.setCellValueFactory(new PropertyValueFactory<>("TwoPoint_Attempts"));
+
+        TableColumn<Team, Double> twoPerCol = new TableColumn<>("2P%");
+        twoPerCol.setMinWidth(50);
+        twoPerCol.setCellValueFactory(new PropertyValueFactory<>("TwoPoint_Percentage"));
+
+        TableColumn<Team, Integer> threeACol = new TableColumn<>("3PA");
+        threeACol.setMinWidth(50);
+        threeACol.setCellValueFactory(new PropertyValueFactory<>("ThreePoint_Attempts"));
+
+        TableColumn<Team, Double> threePerCol = new TableColumn<>("2P%");
+        threePerCol.setMinWidth(50);
+        threePerCol.setCellValueFactory(new PropertyValueFactory<>("ThreePoint_Percentage"));
+
+        TableColumn<Team, Double> efgCol = new TableColumn<>("EFG%");
+        efgCol.setMinWidth(50);
+        efgCol.setCellValueFactory(new PropertyValueFactory<>("EFG_Percentage"));
+
+        TableColumn<Team, Double> tsCol = new TableColumn<>("TS%");
+        tsCol.setMinWidth(50);
+        tsCol.setCellValueFactory(new PropertyValueFactory<>("TS_Percentage"));
+
+        TableColumn<Team, Double> ppgCol = new TableColumn<>("PPG");
+        ppgCol.setMinWidth(50);
+        ppgCol.setCellValueFactory(new PropertyValueFactory<>("PPG"));
+
+        TableColumn<Team, Double> rpgCol = new TableColumn<>("RPG");
+        rpgCol.setMinWidth(50);
+        rpgCol.setCellValueFactory(new PropertyValueFactory<>("RPG"));
+
+        TableColumn<Team, Double> apgCol = new TableColumn<>("APG");
+        apgCol.setMinWidth(50);
+        apgCol.setCellValueFactory(new PropertyValueFactory<>("APG"));
+
+        TableColumn<Team, Double> spgCol = new TableColumn<>("SPG");
+        spgCol.setMinWidth(50);
+        spgCol.setCellValueFactory(new PropertyValueFactory<>("SPG"));
+
+        TableColumn<Team, Double> bpgCol = new TableColumn<>("BPG");
+        bpgCol.setMinWidth(50);
+        bpgCol.setCellValueFactory(new PropertyValueFactory<>("BPG"));
+
+        TableColumn<Team, Double> topgCol = new TableColumn<>("TOPG");
+        topgCol.setMinWidth(50);
+        topgCol.setCellValueFactory(new PropertyValueFactory<>("TOPG"));
+
+
+        allTeams = new TableView<>();
+        allTeams.getColumns().addAll(nameCol, teamAgeCol, ftaCol, ftaPerCol, twoACol, twoPerCol, threeACol, threePerCol, efgCol, tsCol, ppgCol, rpgCol, apgCol, spgCol, bpgCol, topgCol);
+        allTeams.setMaxWidth(1000);
     }
 
     private void setUsername(String user, String pass) {
@@ -296,6 +407,39 @@ public class Main extends Application {
             System.out.println("Could no retrieve observable list of players");
         }
         return playerList;
+    }
+
+    private ObservableList<Team> getTeamList(ResultSet set) {
+        ObservableList<Team> teamList = FXCollections.observableArrayList();
+        Team t;
+        try {
+            while (set.next()) {
+                String name = set.getString("TEAM_NAME");
+                double age = set.getBigDecimal("AGE").doubleValue();
+                int fta = set.getInt("FTA");
+                double ftPer = set.getBigDecimal("FREETHROW_PERCENTAGE").doubleValue();
+                int two = set.getInt("2PA");
+                double twoPer = set.getBigDecimal("2PT_PERCENTAGE").doubleValue();
+                int three = set.getInt("3PA");
+                double threePer = set.getBigDecimal("3PT_PERCENTAGE").doubleValue();
+                double efg = set.getBigDecimal("EFG_PERCENTAGE").doubleValue();
+                double TSPer = set.getBigDecimal("TRUE_SHOOTING_PERCENTAGE").doubleValue();
+                double ppg = set.getBigDecimal("PPG").doubleValue();
+                double rpg = set.getBigDecimal("RPG").doubleValue();
+                double apg = set.getBigDecimal("APG").doubleValue();
+                double spg = set.getBigDecimal("SPG").doubleValue();
+                double bpg = set.getBigDecimal("BPG").doubleValue();
+                double topg = set.getBigDecimal("TOPG").doubleValue();
+
+                t = new Team(name, age, fta, ftPer, two, twoPer, three, threePer
+                        , efg, TSPer, ppg, rpg, apg, spg, bpg, topg);
+                teamList.add(t);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Could not retrieve observable list of teams");
+        }
+        return teamList;
     }
 
     public static void main(String[] args) {

@@ -1,15 +1,8 @@
-package sample;
+package league;
 
-public class Player {
+public class Team {
     private String Name;
-    //private int Season;
-    private String Team;
-    private int Age;
-    private int Games_Played;
-    private double MPG;
-    private double Minutes_Percentage;
-    private double Usage_Percentage;
-    private double Turnover_Ratio;
+    private double Age;
     private int FTA;
     private double FT_Percentage;
     private int TwoPoint_Attempts;
@@ -24,20 +17,10 @@ public class Player {
     private double SPG;
     private double BPG;
     private double TOPG;
-    private double ORTG;
-    private double DRTG;
 
-
-    public Player(String name, /*int season, */String team, int age, int games_Played, double MPG, double minutes_Percentage, double usage_Percentage, double turnover_Ratio, int FTA, double FT_Percentage, int twoPoint_Attempts, double twoPoint_Percentage, int threePoint_Attempts, double threePoint_Percentage, double EFG_Percentage, double TS_Percentage, double PPG, double RPG, double APG, double SPG, double BPG, double TOPG, double ORTG, double DRTG) {
+    public Team(String name, double age,  int FTA, double FT_Percentage, int twoPoint_Attempts, double twoPoint_Percentage, int threePoint_Attempts, double threePoint_Percentage, double EFG_Percentage, double TS_Percentage, double PPG, double RPG, double APG, double SPG, double BPG, double TOPG) {
         Name = name;
-        //Season = season;
-        Team = team;
         Age = age;
-        Games_Played = games_Played;
-        this.MPG = MPG;
-        Minutes_Percentage = minutes_Percentage;
-        Usage_Percentage = usage_Percentage;
-        Turnover_Ratio = turnover_Ratio;
         this.FTA = FTA;
         this.FT_Percentage = FT_Percentage;
         TwoPoint_Attempts = twoPoint_Attempts;
@@ -52,44 +35,14 @@ public class Player {
         this.SPG = SPG;
         this.BPG = BPG;
         this.TOPG = TOPG;
-        this.ORTG = ORTG;
-        this.DRTG = DRTG;
     }
 
     public String getName() {
         return Name;
     }
 
-    /*public int getSeason() {
-        return Season;
-    }*/
-
-    public String getTeam() {
-        return Team;
-    }
-
-    public int getAge() {
+    public double getAge() {
         return Age;
-    }
-
-    public int getGames_Played() {
-        return Games_Played;
-    }
-
-    public double getMPG() {
-        return MPG;
-    }
-
-    public double getMinutes_Percentage() {
-        return Minutes_Percentage;
-    }
-
-    public double getUsage_Percentage() {
-        return Usage_Percentage;
-    }
-
-    public double getTurnover_Ratio() {
-        return Turnover_Ratio;
     }
 
     public int getFTA() {
@@ -146,13 +99,5 @@ public class Player {
 
     public double getTOPG() {
         return TOPG;
-    }
-
-    public double getORTG() {
-        return ORTG;
-    }
-
-    public double getDRTG() {
-        return DRTG;
     }
 }

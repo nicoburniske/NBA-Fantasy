@@ -24,7 +24,7 @@ public class FantasyApplication extends Application {
     private TableView<Player> allPlayers;
     private TableView<Team> allTeams;
 
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.window = primaryStage;
         database = new Database_Utils();
         this.window.setTitle("NBA Fantasy League");
@@ -151,13 +151,18 @@ public class FantasyApplication extends Application {
         GridPane.setConstraints(logOut, 5, 0);
 
         Button viewTeam = new Button("View Team Players");
-        viewTeam.setOnAction(e ->
-                allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user))));
+        viewTeam.setOnAction(e -> {
+            title.setText("Your Players      ");
+            allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user)));
+            });
+
         GridPane.setConstraints(viewTeam, 5, 1);
 
         Button viewAllPlayers = new Button("View All Players");
-        viewAllPlayers.setOnAction(e ->
-                allPlayers.setItems(getPlayerList(this.database.getAllPlayers())));
+        viewAllPlayers.setOnAction(e -> {
+            title.setText("All Current Players     ");
+            allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
+        });
         GridPane.setConstraints(viewAllPlayers, 5, 2);
 
         Button addPlayer = new Button("Add selected player");

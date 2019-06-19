@@ -189,6 +189,20 @@ public class Database_Utils {
         return rs;
     }
 
+    public ResultSet searchPlayers(String player){
+        String query = String.format("SELECT * FROM PLAYER_SEASON WHERE PLAYER_ID = '%1$2s'", player);
+        ResultSet rs = null;
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            rs = statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could not obtain players from search");
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
     public void addPlayer(String user, String player){
         String query = String.format("CALL enroll('%1$2s','%2$2s')", user, player);
         try {

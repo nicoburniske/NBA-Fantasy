@@ -29,6 +29,8 @@ public class Main extends Application {
 
         initLoginButtons();
         initTeamView();
+        this.login.getStylesheets().add("nbaStyle.css");
+        this.team.getStylesheets().add("nbaStyle.css");
         this.window.setScene(this.login);
         this.window.centerOnScreen();
         this.window.show();
@@ -68,7 +70,10 @@ public class Main extends Application {
         login.setOnAction(e -> {
             setUsername(enterUsername.getText(), enterPassword.getText());
             if (database.validUserLogin(this.user, this.pass)) {
+                enterUsername.clear();
+                enterPassword.clear();
                 this.window.setScene(this.team);
+                this.window.centerOnScreen();
             } else {
                 invalidUserPass.showAndWait();
             }
@@ -92,29 +97,59 @@ public class Main extends Application {
     }
 
     private void initTeamView() {
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(10);
+        grid.setVgap(8);
+
         createColumns();
         allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
+        GridPane.setConstraints(allPlayers, 0, 1, 4, 5);
+
+        Label search = new Label("Search: ");
+        GridPane.setConstraints(search, 1, 0);
+
+        TextField searchBox = new TextField();
+        searchBox.setPromptText("Player Name");
+        GridPane.setConstraints(searchBox, 2, 0);
+
+        Button searchButton = new Button("League Search");
+        searchButton.setOnAction(e ->
+                allPlayers.setItems((getPlayerList(this.database.searchPlayers(searchBox.getText()))))
+                );
+        GridPane.setConstraints(searchButton,3, 0);
+
+        Button logOut = new Button("Logout");
+        logOut.setOnAction(e -> {
+            this.window.setScene(login);
+            this.window.centerOnScreen();
+        });
+        GridPane.setConstraints(logOut, 5, 0);
 
         Button viewTeam = new Button("View Team Players");
         viewTeam.setOnAction(e ->
                 allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user))));
+        GridPane.setConstraints(viewTeam, 5, 1);
 
         Button viewAllPlayers = new Button("View All Players");
         viewAllPlayers.setOnAction(e ->
                 allPlayers.setItems(getPlayerList(this.database.getAllPlayers())));
+        GridPane.setConstraints(viewAllPlayers, 5, 2);
 
         Button addPlayer = new Button("Add selected player");
         addPlayer.setOnAction(e ->
                 this.database.addPlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName()));
+        GridPane.setConstraints(addPlayer, 5, 3);
 
         Button removePlayer = new Button("Remove selected player");
-        removePlayer.setOnAction(e ->
-                this.database.removePlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName()));
+        removePlayer.setOnAction(e -> {
+            this.database.removePlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName());
+            allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user)));
+        });
+        GridPane.setConstraints(removePlayer, 5, 4);
 
-
-        VBox layout = new VBox();
-        layout.getChildren().addAll(allPlayers, viewTeam, viewAllPlayers, addPlayer, removePlayer);
-        team = new Scene(layout);
+        grid.getChildren().addAll(allPlayers,search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut);
+        team = new Scene(grid);
     }
 
     private void createColumns() {

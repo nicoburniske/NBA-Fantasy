@@ -4,10 +4,12 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -22,7 +24,6 @@ public class FantasyApplication extends Application {
     private TableView<Player> allPlayers;
     private TableView<Team> allTeams;
 
-    @Override
     public void start(Stage primaryStage) throws Exception {
         this.window = primaryStage;
         database = new Database_Utils();
@@ -31,7 +32,7 @@ public class FantasyApplication extends Application {
 
         initLoginButtons();
 
-        createColumns();
+        createPlayerColumns();
         createTeamColumns();
 
         initTeamView();
@@ -52,20 +53,28 @@ public class FantasyApplication extends Application {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
         grid.setVgap(8);
+        grid.setAlignment(Pos.CENTER);
+
+        Label title = new Label("NBA FANTASY LEAGUE");
+       // title.setStyle("-fx-font-size: 25;");
+        GridPane.setConstraints(title, 0, 0);
+
+        ImageView logo = new ImageView(new Image("/images/fantasylogo5.png"));
+        GridPane.setConstraints(logo, 1,0);
 
         Label username = new Label("Username: ");
-        GridPane.setConstraints(username, 0, 0);
+        GridPane.setConstraints(username, 0, 1);
 
         TextField enterUsername = new TextField();
         enterUsername.setPromptText("Username");
-        GridPane.setConstraints(enterUsername, 1, 0);
+        GridPane.setConstraints(enterUsername, 1, 1);
 
         Label password = new Label("Password: ");
-        GridPane.setConstraints(password, 0, 1);
+        GridPane.setConstraints(password, 0, 2);
 
         TextField enterPassword = new TextField();
         enterPassword.setPromptText("Password");
-        GridPane.setConstraints(enterPassword, 1, 1);
+        GridPane.setConstraints(enterPassword, 1, 2);
 
         Alert userAlreadyExists = new Alert(Alert.AlertType.ERROR);
         userAlreadyExists.setTitle("Error");
@@ -89,7 +98,7 @@ public class FantasyApplication extends Application {
                 invalidUserPass.showAndWait();
             }
         });
-        GridPane.setConstraints(login, 0, 2);
+        GridPane.setConstraints(login, 0, 3);
 
         Button create_account = new Button("Create Account");
         create_account.setOnAction(e -> {
@@ -100,11 +109,11 @@ public class FantasyApplication extends Application {
                 this.database.createUser(this.user, this.pass);
             }
         });
-        GridPane.setConstraints(create_account, 1, 2);
+        GridPane.setConstraints(create_account, 1, 3);
 
-        grid.getChildren().addAll(username, enterUsername, password, enterPassword, login, create_account);
+        grid.getChildren().addAll(title, logo, username, enterUsername, password, enterPassword, login, create_account);
 
-        this.login = new Scene(grid, 300, 200);
+        this.login = new Scene(grid, 400, 300);
     }
 
     private void initTeamView() {
@@ -112,9 +121,14 @@ public class FantasyApplication extends Application {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
         grid.setVgap(8);
+        grid.setAlignment(Pos.CENTER);
 
         allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
         GridPane.setConstraints(allPlayers, 0, 1, 4, 7);
+
+        Label title = new Label("All Current Players     ");
+        title.setStyle("-fx-font-size: 25;");
+        GridPane.setConstraints(title, 0, 0);
 
         Label search = new Label("Search: ");
         GridPane.setConstraints(search, 1, 0);
@@ -165,7 +179,12 @@ public class FantasyApplication extends Application {
         });
         GridPane.setConstraints(viewLeague, 5, 5);
 
-        grid.getChildren().addAll(allPlayers, search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut, viewLeague);
+        ImageView logo = new ImageView(new Image("/images/fantasylogo.png"));
+        logo.setStyle("-fx-border-radius: 30; -fx-background-radius: 10 10 0 0;");
+
+        GridPane.setConstraints(logo,5, 6);
+
+        grid.getChildren().addAll(allPlayers, search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut, viewLeague, title, logo);
         team = new Scene(grid);
     }
 
@@ -180,8 +199,7 @@ public class FantasyApplication extends Application {
         allTeams.setItems(getTeamList(this.database.getTeams()));
         GridPane.setConstraints(allTeams, 0, 1, 4, 5);
 
-
-        Button back = new Button("Back to team");
+        Button back = new Button("Back to Team");
         back.setOnAction(e -> {
             window.setScene(this.team);
             window.centerOnScreen();
@@ -189,10 +207,11 @@ public class FantasyApplication extends Application {
         GridPane.setConstraints(back, 1, 0);
 
         grid.getChildren().addAll(allTeams, back);
+        grid.setAlignment(Pos.CENTER);
         league = new Scene(grid);
     }
 
-    private void createColumns() {
+    private void createPlayerColumns() {
         TableColumn<Player, String> nameCol = new TableColumn<>("Name");
         nameCol.setMinWidth(130);
         nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -241,7 +260,7 @@ public class FantasyApplication extends Application {
         threeACol.setMinWidth(50);
         threeACol.setCellValueFactory(new PropertyValueFactory<>("ThreePoint_Attempts"));
 
-        TableColumn<Player, Double> threePerCol = new TableColumn<>("2P%");
+        TableColumn<Player, Double> threePerCol = new TableColumn<>("3P%");
         threePerCol.setMinWidth(50);
         threePerCol.setCellValueFactory(new PropertyValueFactory<>("ThreePoint_Percentage"));
 

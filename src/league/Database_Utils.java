@@ -1,6 +1,10 @@
 package league;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class Database_Utils {
@@ -9,7 +13,7 @@ public class Database_Utils {
     private final String userName = "root";
 
     //The password for the MySQL account (or empty for anonymous) */
-    private final String password = "Theoneandonly5658";
+    private final String password = "oreo1999";
 
     //The name of the computer running MySQL
     private final String serverName = "localhost";

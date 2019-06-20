@@ -2,7 +2,7 @@
 
 All necessary libraries are kept in the libraries module.
 
-Depending on your java SDK, it may not come with JavaFX included. 
+Depending on your Java SDK, it may not come with JavaFX included. 
 
 * Step 1: Ensure that Project language level is set to 8
 

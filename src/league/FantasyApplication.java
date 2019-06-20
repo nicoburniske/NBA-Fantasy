@@ -74,7 +74,6 @@ public class FantasyApplication extends Application {
 
         TextField enterPassword = new TextField();
         enterPassword.setPromptText("Password");
-        enterPassword.setVisible(false);
         GridPane.setConstraints(enterPassword, 1, 2);
 
         Alert userAlreadyExists = new Alert(Alert.AlertType.ERROR);

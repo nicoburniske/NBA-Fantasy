@@ -9,10 +9,10 @@ import java.util.Properties;
 
 public class Database_Utils {
 
-    //The name of the MySQL account to use (or empty for anonymous) */
+    //The name of the MySQL account to use (or empty for anonymous)
     private final String userName = "root";
 
-    //The password for the MySQL account (or empty for anonymous) */
+    //The password for the MySQL account (or empty for anonymous)
     private final String password = "oreo1999";
 
     //The name of the computer running MySQL

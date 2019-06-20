@@ -321,7 +321,7 @@ public class FantasyApplication extends Application {
 
         allPlayers = new TableView<>();
         allPlayers.getColumns().addAll(nameCol, teamCol, ageCol, gameCol, minutesCol, usageCol, turnRatioCol, ftaCol, ftaPerCol, twoACol, twoPerCol, threeACol, threePerCol, efgCol, tsCol, ppgCol, rpgCol, apgCol, spgCol, bpgCol, topgCol, ortgCol, drtgCol);
-        allPlayers.setMaxWidth(1270);
+        allPlayers.setMaxWidth(1300);
     }
 
     private void createTeamColumns() {

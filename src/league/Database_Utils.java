@@ -162,7 +162,7 @@ public class Database_Utils {
     }
 
     public ResultSet getAllPlayers(){
-        String query = "SELECT * FROM player_season";
+        String query = "CALL getAllPlayers()";
         ResultSet rs = null;
         try{
             Connection con = this.getConnection();

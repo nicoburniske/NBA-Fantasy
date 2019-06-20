@@ -1,8 +1,8 @@
 # Installation Instructions #
 
-All necessary libraries are kept in the libraries module.
+All necessary libraries are kept in the libraries module
 
-Depending on your Java SDK, it may not come with JavaFX included. 
+Depending on your Java SDK, it may not come with JavaFX included
 
 * Step 1: Ensure that Project language level is set to 8
 
@@ -14,13 +14,13 @@ Depending on your Java SDK, it may not come with JavaFX included.
   
   * Then under 'Platform Settings' select the 'Global Libraries' tab
   
-  * Select the + sign in the upper left. 
+  * Select the + sign in the upper left
   
-  * Then select 'Java' from the dropdown menu.
+  * Then select 'Java' from the dropdown menu
   
   * Select all the jar files under Final_Project/libraries/javafx-sdk-11.0.2/lib 
   
-  * When prompted "Library <YOUR LIBRARY NAME> will be added to the selected modules." make sure that this project is currently selected, and the click ok.
+  * When prompted "Library <YOUR LIBRARY NAME> will be added to the selected modules." make sure that this project is currently selected, and the click ok
   
 * Step 4: In the Database_Utils class edit the following 4 fields so that it satisfies the requirements of your MySQL server
   * userName

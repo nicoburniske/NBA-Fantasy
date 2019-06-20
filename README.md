@@ -22,22 +22,23 @@ Example Usage:
 
 ## CRUD OPERATIONS ##
 
-CREATE:
+* CREATE:
 
-By creating a new user, one creates a new user_team entry in the database.
+ * By creating a new user, one creates a new user_team entry in the database.
 
-READ:
+* READ:
 
-There are many different read operation being made.
+  * There are many different read operation being made. One example is the "All Current Players" Table
+  * The "All Current Players" table shows all the players who participated in the 2018-2019 NBA season. This is done by reading the data 
+    available in the player_season table in the database. In the case that players were traded during the season, players can play for
+    multiple different teams in a given season. This is taken into account when displaying the players, their teams and their
+    statistics.
 
-One example is the "All Current Players" Table
+*UPDATE:
 
-The "All Current Players" table shows all the players who participated in the 2018-2019 NBA season. This is done by reading the data available in the player_season table in the database. In the case that players were traded during the season, players can play for multiple different teams in a given season. This is taken into account when displaying the players, their teams and their statistics.
+  *By adding the selected player, we are updating the team that the given player is on.
 
-UPDATE:
+*DELETE:
 
-By adding the selected player, we are updating the team that the given player is on.
-
-DELETE:
-
-By deleting your account, we are deleting an entry in the user_team table. All players who were on your team are made available. Other users in the league can now add them to their team.
+  *By deleting an account, we are deleting an entry in the user_team table. All players who were previously on the user team are now 
+  made available. Other users in the league are now able to add them to their team.

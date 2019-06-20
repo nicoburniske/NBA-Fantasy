@@ -46,7 +46,6 @@ public class Database_Utils {
         return conn;
     }
 
-
     /**
      * Determines if the username/password combination is valid.
      */

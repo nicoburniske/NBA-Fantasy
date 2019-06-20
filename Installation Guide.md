@@ -30,7 +30,7 @@ Depending on your java SDK, it may not come with JavaFX included.
   * dbName
 
 * Ensure that the Database has been restored from the dump file
-  * /Data Files/nbafantasy.sql
+  * Final_Project/Data Files/nbafantasy.sql
   
 * Run the program by running Main.main()
   * Either set up the appropriate run configuration or right click on the Main class and select 'Run Main.main()'

@@ -2,7 +2,7 @@
 
 EER Diagram:
 
-![alt text](https://github.com/nicoburniske/NBA-Fantasy/blob/master/examples/EER-Diagram.PNG)
+![alt text](https://github.com/nicoburniske/NBA-Fantasy/blob/master/examples/EER-Diagram.png)
 
 Login Screen:
 

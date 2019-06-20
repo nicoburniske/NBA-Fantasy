@@ -241,10 +241,20 @@ public class Database_Utils {
         }
     }
 
+    public void deleteAccount(String user) {
+        String query = String.format("DELETE FROM user_team WHERE USERNAME = '%1$2s'", user);
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could not delete account");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String args[]){
         Database_Utils db = new Database_Utils();
         System.out.println(db.validUserLogin("nick", "burn"));
     }
-
-
 }

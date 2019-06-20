@@ -143,12 +143,21 @@ public class FantasyApplication extends Application {
         );
         GridPane.setConstraints(searchButton, 3, 0);
 
+
+        Button delete_account = new Button("Delete Account");
+        delete_account.setOnAction(e -> {
+            this.database.deleteAccount(this.user);
+            this.window.setScene(login);
+            this.window.centerOnScreen();
+        });
+        GridPane.setConstraints(delete_account, 5, 0);
+
         Button logOut = new Button("Logout");
         logOut.setOnAction(e -> {
             this.window.setScene(login);
             this.window.centerOnScreen();
         });
-        GridPane.setConstraints(logOut, 5, 0);
+        GridPane.setConstraints(logOut, 5, 1);
 
         Button viewTeam = new Button("View Team Players");
         viewTeam.setOnAction(e -> {
@@ -156,26 +165,26 @@ public class FantasyApplication extends Application {
             allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user)));
             });
 
-        GridPane.setConstraints(viewTeam, 5, 1);
+        GridPane.setConstraints(viewTeam, 5, 2);
 
         Button viewAllPlayers = new Button("View All Players");
         viewAllPlayers.setOnAction(e -> {
             title.setText("All Current Players     ");
             allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
         });
-        GridPane.setConstraints(viewAllPlayers, 5, 2);
+        GridPane.setConstraints(viewAllPlayers, 5, 3);
 
         Button addPlayer = new Button("Add selected player");
         addPlayer.setOnAction(e ->
                 this.database.addPlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName()));
-        GridPane.setConstraints(addPlayer, 5, 3);
+        GridPane.setConstraints(addPlayer, 5, 4);
 
         Button removePlayer = new Button("Remove selected player");
         removePlayer.setOnAction(e -> {
             this.database.removePlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName());
             allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user)));
         });
-        GridPane.setConstraints(removePlayer, 5, 4);
+        GridPane.setConstraints(removePlayer, 5, 5);
 
         Button viewLeague = new Button("Show League");
         viewLeague.setOnAction(e -> {
@@ -183,14 +192,14 @@ public class FantasyApplication extends Application {
             this.window.setScene(this.league);
             this.window.centerOnScreen();
         });
-        GridPane.setConstraints(viewLeague, 5, 5);
+        GridPane.setConstraints(viewLeague, 5, 6);
 
         ImageView logo = new ImageView(new Image("/images/fantasylogo.png"));
         logo.setStyle("-fx-border-radius: 30; -fx-background-radius: 10 10 0 0;");
 
-        GridPane.setConstraints(logo,5, 6);
+        GridPane.setConstraints(logo,5, 7);
 
-        grid.getChildren().addAll(allPlayers, search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut, viewLeague, title, logo);
+        grid.getChildren().addAll(allPlayers, search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut, viewLeague, title, logo, delete_account);
         team = new Scene(grid);
     }
 

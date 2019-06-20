@@ -217,6 +217,23 @@ public class Database_Utils {
         return rs;
     }
 
+    public boolean isPlayerAvailable(String player){
+        boolean isValid = false;
+        String query = String.format("SELECT COUNT(*) AS REGISTERED FROM PLAYER WHERE PLAYER_NAME = '%1$2s' and USER_TEAM IS NOT NULL", player);
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            int isRegistered = rs.getInt("REGISTERED");
+            isValid = (isRegistered == 0);
+        } catch (SQLException e){
+            System.out.println("Error could not get player registration status");
+            e.printStackTrace();
+        }
+        return isValid;
+    }
+
     public void addPlayer(String user, String player){
         String query = String.format("CALL enroll('%1$2s','%2$2s')", user, player);
         try {
@@ -241,6 +258,18 @@ public class Database_Utils {
         }
     }
 
+    public void removeAllPlayers(String user){
+        String query = String.format("CALL removeAllPlayers('%1$2s')", user);
+        try {
+            Connection con = this.getConnection();
+            Statement statement = con.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("Error: Could not delete account");
+            e.printStackTrace();
+        }
+    }
+
     public void deleteAccount(String user) {
         String query = String.format("DELETE FROM user_team WHERE USERNAME = '%1$2s'", user);
         try {
@@ -255,6 +284,7 @@ public class Database_Utils {
 
     public static void main(String args[]){
         Database_Utils db = new Database_Utils();
-        System.out.println(db.validUserLogin("nick", "burn"));
+        System.out.println(db.isPlayerAvailable("Kyrie Irving"));
+
     }
 }

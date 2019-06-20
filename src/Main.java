@@ -1,5 +1,3 @@
-package league;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,11 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import league.Database_Utils;
+import league.Player;
+import league.Team;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FantasyApplication extends Application {
+public class Main extends Application {
     private Stage window;
     private Scene login, team, league;
     private String user, pass;
@@ -56,11 +57,11 @@ public class FantasyApplication extends Application {
         grid.setAlignment(Pos.CENTER);
 
         Label title = new Label("NBA FANTASY LEAGUE");
-       // title.setStyle("-fx-font-size: 25;");
+        // title.setStyle("-fx-font-size: 25;");
         GridPane.setConstraints(title, 0, 0);
 
         ImageView logo = new ImageView(new Image("/images/fantasylogo5.png"));
-        GridPane.setConstraints(logo, 1,0);
+        GridPane.setConstraints(logo, 1, 0);
 
         Label username = new Label("Username: ");
         GridPane.setConstraints(username, 0, 1);
@@ -107,6 +108,10 @@ public class FantasyApplication extends Application {
                 userAlreadyExists.showAndWait();
             } else {
                 this.database.createUser(this.user, this.pass);
+                enterUsername.clear();
+                enterPassword.clear();
+                this.window.setScene(this.team);
+                this.window.centerOnScreen();
             }
         });
         GridPane.setConstraints(create_account, 1, 3);
@@ -121,7 +126,6 @@ public class FantasyApplication extends Application {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
         grid.setVgap(8);
-        grid.setAlignment(Pos.CENTER);
 
         allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
         GridPane.setConstraints(allPlayers, 0, 1, 4, 7);
@@ -143,9 +147,11 @@ public class FantasyApplication extends Application {
         );
         GridPane.setConstraints(searchButton, 3, 0);
 
-
         Button delete_account = new Button("Delete Account");
         delete_account.setOnAction(e -> {
+            title.setText("All Current Players     ");
+            allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
+            this.database.removeAllPlayers(this.user);
             this.database.deleteAccount(this.user);
             this.window.setScene(login);
             this.window.centerOnScreen();
@@ -154,6 +160,8 @@ public class FantasyApplication extends Application {
 
         Button logOut = new Button("Logout");
         logOut.setOnAction(e -> {
+            title.setText("All Current Players     ");
+            allPlayers.setItems(getPlayerList(this.database.getAllPlayers()));
             this.window.setScene(login);
             this.window.centerOnScreen();
         });
@@ -163,7 +171,7 @@ public class FantasyApplication extends Application {
         viewTeam.setOnAction(e -> {
             title.setText("Your Players      ");
             allPlayers.setItems(getPlayerList(this.database.getTeamPlayers(this.user)));
-            });
+        });
 
         GridPane.setConstraints(viewTeam, 5, 2);
 
@@ -174,9 +182,19 @@ public class FantasyApplication extends Application {
         });
         GridPane.setConstraints(viewAllPlayers, 5, 3);
 
+        Alert playerNotAvailable = new Alert(Alert.AlertType.ERROR);
+        playerNotAvailable.setTitle("Error");
+        playerNotAvailable.setHeaderText("Cannot add player");
+        playerNotAvailable.setContentText("Player is already registered on a team");
+
         Button addPlayer = new Button("Add selected player");
-        addPlayer.setOnAction(e ->
-                this.database.addPlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName()));
+        addPlayer.setOnAction(e -> {
+            if (this.database.isPlayerAvailable(allPlayers.getSelectionModel().getSelectedItem().getName())) {
+                this.database.addPlayer(this.user, allPlayers.getSelectionModel().getSelectedItem().getName());
+            } else {
+                playerNotAvailable.showAndWait();
+            }
+        });
         GridPane.setConstraints(addPlayer, 5, 4);
 
         Button removePlayer = new Button("Remove selected player");
@@ -197,7 +215,7 @@ public class FantasyApplication extends Application {
         ImageView logo = new ImageView(new Image("/images/fantasylogo.png"));
         logo.setStyle("-fx-border-radius: 30; -fx-background-radius: 10 10 0 0;");
 
-        GridPane.setConstraints(logo,5, 7);
+        GridPane.setConstraints(logo, 5, 7);
 
         grid.getChildren().addAll(allPlayers, search, searchBox, searchButton, viewTeam, viewAllPlayers, addPlayer, removePlayer, logOut, viewLeague, title, logo, delete_account);
         team = new Scene(grid);
@@ -321,7 +339,7 @@ public class FantasyApplication extends Application {
 
         allPlayers = new TableView<>();
         allPlayers.getColumns().addAll(nameCol, teamCol, ageCol, gameCol, minutesCol, usageCol, turnRatioCol, ftaCol, ftaPerCol, twoACol, twoPerCol, threeACol, threePerCol, efgCol, tsCol, ppgCol, rpgCol, apgCol, spgCol, bpgCol, topgCol, ortgCol, drtgCol);
-        allPlayers.setMaxWidth(1300);
+        allPlayers.setMaxWidth(1305);
     }
 
     private void createTeamColumns() {
@@ -392,7 +410,7 @@ public class FantasyApplication extends Application {
 
         allTeams = new TableView<>();
         allTeams.getColumns().addAll(nameCol, teamAgeCol, ftaCol, ftaPerCol, twoACol, twoPerCol, threeACol, threePerCol, efgCol, tsCol, ppgCol, rpgCol, apgCol, spgCol, bpgCol, topgCol);
-        allTeams.setMaxWidth(1000);
+        allTeams.setMaxWidth(1200);
     }
 
     private void setUsername(String user, String pass) {

@@ -1,8 +1,10 @@
 package league;
 
+/**
+ * Wrapper class for player data.
+ */
 public class Player {
     private String Name;
-    //private int Season;
     private String Team;
     private int Age;
     private int Games_Played;
@@ -58,10 +60,6 @@ public class Player {
     public String getName() {
         return Name;
     }
-
-    /*public int getSeason() {
-        return Season;
-    }*/
 
     public String getTeam() {
         return Team;

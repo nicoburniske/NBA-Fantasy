@@ -1,5 +1,8 @@
 package league;
 
+/**
+ * Wrapper class for Team data.
+ */
 public class Team {
     private String Name;
     private double Age;

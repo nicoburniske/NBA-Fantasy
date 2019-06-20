@@ -30,6 +30,9 @@ public class Main extends Application {
     private TableView<Player> allPlayers;
     private TableView<Team> allTeams;
 
+    /**
+     * Initializes application.
+     */
     public void start(Stage primaryStage) {
         this.window = primaryStage;
         database = new Database_Utils();
@@ -54,6 +57,9 @@ public class Main extends Application {
         this.window.show();
     }
 
+    /**
+     * Initializes login Scene and button operations.
+     */
     private void initLoginButtons() {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -126,6 +132,9 @@ public class Main extends Application {
         this.login = new Scene(grid, 400, 300);
     }
 
+    /**
+     * Initializes the team Scene and button operations.
+     */
     private void initTeamView() {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -226,6 +235,9 @@ public class Main extends Application {
         team = new Scene(grid);
     }
 
+    /**
+     * Initializes the league Scene and button operations.
+     */
     private void initLeagueView() {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -249,6 +261,9 @@ public class Main extends Application {
         league = new Scene(grid);
     }
 
+    /**
+     * Creates columns for allPlayers tableView to display data from SQL database
+     */
     private void createPlayerColumns() {
         TableColumn<Player, String> nameCol = new TableColumn<>("Name");
         nameCol.setMinWidth(130);
@@ -347,6 +362,9 @@ public class Main extends Application {
         allPlayers.setMaxWidth(1305);
     }
 
+    /**
+     * Creates columns for allTeams tableView to display data from SQL database
+     */
     private void createTeamColumns() {
         TableColumn<Team, String> nameCol = new TableColumn<>("Name");
         nameCol.setMinWidth(130);
@@ -418,11 +436,19 @@ public class Main extends Application {
         allTeams.setMaxWidth(1200);
     }
 
+    /**
+     * Records user input.
+     */
     private void setUsername(String user, String pass) {
         this.user = user;
         this.pass = pass;
     }
 
+    /**
+     * Uses data in ResultSet from SQL Database to form an ObservableList<Player>.
+     * <p>
+     * Is used in allPlayers tableView.
+     */
     private ObservableList<Player> getPlayerList(ResultSet set) {
         ObservableList<Player> playerList = FXCollections.observableArrayList();
         Player p;
@@ -464,6 +490,11 @@ public class Main extends Application {
         return playerList;
     }
 
+    /**
+     * Uses data in ResultSet from SQL Database to form an ObservableList<Team>.
+     * <p>
+     * Is used in allTeams tableView.
+     */
     private ObservableList<Team> getTeamList(ResultSet set) {
         ObservableList<Team> teamList = FXCollections.observableArrayList();
         Team t;
@@ -497,6 +528,9 @@ public class Main extends Application {
         return teamList;
     }
 
+    /**
+     * Program entry point.
+     */
     public static void main(String[] args) {
         launch(args);
     }

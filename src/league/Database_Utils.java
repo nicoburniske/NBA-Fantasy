@@ -13,7 +13,7 @@ public class Database_Utils {
     private final String userName = "root";
 
     //The password for the MySQL account (or empty for anonymous)
-    private final String password = "oreo1999";
+    private final String password = "";
 
     //The name of the computer running MySQL
     private final String serverName = "localhost";
